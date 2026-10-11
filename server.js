@@ -3,10 +3,8 @@ const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 
-// Enable JSON parsing
+// Middleware
 app.use(express.json());
-
-// Serve all static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB Connection
@@ -61,4 +59,5 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// EXPORT APP FOR VERCEL SERVERLESS DEPLOYMENT (Crucial for preventing 404s)
 module.exports = app;
