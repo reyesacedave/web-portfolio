@@ -1,5 +1,5 @@
 let allData = [];
-let currentParentId = 'home';
+let currentParentId = 'root';
 let currentFolderName = '';
 
 async function fetchItems() {
@@ -120,7 +120,7 @@ function clickItem(id, type, name) {
 }
 
 function goHome() {
-    currentParentId = 'home';
+    currentParentId = 'root';
     currentFolderName = '';
     render();
 }
