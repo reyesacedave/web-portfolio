@@ -53,7 +53,7 @@ async function previewImage(event) {
 
 function render() {
     let grid = document.getElementById('file-grid');
-    document.getElementById('current-path').innerText = currentFolderName ? 'root / ' + currentFolderName : 'root';
+    document.getElementById('current-path').innerText = currentFolderName ? 'home / ' + currentFolderName : 'home';
 
     let currentItems = allData.filter(item => item.parentId === currentParentId);
 
