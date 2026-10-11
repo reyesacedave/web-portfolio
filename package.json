@@ -2,7 +2,12 @@
   "name": "student-portfolio",
   "version": "1.0.0",
   "description": "Student portfolio with MongoDB and Vercel support",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
+    "express": "^4.19.2",
     "mongoose": "^8.3.1"
   }
 }

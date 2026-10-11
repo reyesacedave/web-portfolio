@@ -10,7 +10,6 @@ async function fetchItems() {
         render();
     } catch (err) {
         console.error('Error fetching items:', err);
-        // Fallback display so UI doesn't break
         let grid = document.getElementById('file-grid');
         if (grid) {
             grid.innerHTML = '<div class="empty-state">Connected, but unable to load items. Check database connection.</div>';
@@ -175,12 +174,8 @@ async function processEntry(entry, parentId) {
 async function deleteItem(id) {
     if (!confirm('Are you sure you want to delete this?')) return;
     try {
-        let response = await fetch('/api/items?id=' + id, { method: 'DELETE' });
-        if (response.ok) {
-            fetchItems();
-        } else {
-            console.error('Failed to delete item');
-        }
+        let response = await fetch('/api/items/' + id, { method: 'DELETE' });
+        if (response.ok) fetchItems();
     } catch (err) {
         console.error('Error deleting item:', err);
     }

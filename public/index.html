@@ -1,68 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Ace Dave Reyes - Student Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portfolio & File Manager</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body onload="loadFiles()">
-
-    <header class="navbar">
-        <h1>Ace Dave Reyes</h1>
-        <nav>
-            <a href="#about">About</a>
-            <a href="#workspace">Activities</a>
-        </nav>
-    </header>
-
-    <main class="container">
-        <!-- About Section -->
-        <section id="about" class="card about-section">
-            <div id="photo-box" class="photo-box" title="My Profile Photo">
-                <img src="my-photo.png" alt="Ace Dave Reyes" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9999px;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa fa-user\'></i><span>Add Photo</span>';">
+    <div class="container">
+        <!-- Profile Section -->
+        <header class="profile-header">
+            <img src="my-photo.png" alt="Profile Photo" class="profile-img">
+            <div class="profile-info">
+                <h1>My IT Student Portfolio</h1>
+                <p>Welcome to my file manager and project repository.</p>
             </div>
-            <div>
-                <h2>Hello, I'm Ace Dave Reyes!</h2>
-                <p>BSIT-31 Student | Passionate about coding, gaming, and watching anime. Exploring full-stack web development and building interactive student projects.</p>
-            </div>
-        </section>
+        </header>
 
-        <!-- Activities Section -->
-        <section id="workspace" class="card">
-            <div class="workspace-header">
-                <div>
-                    <h3>Activities & Projects</h3>
-                    <p class="text-muted">Explore my coursework, laboratory files, and activity submissions.</p>
-                </div>
-                <div class="btn-group">
-                    <input type="file" id="folder-upload-input" webkitdirectory directory multiple class="file-hidden" onchange="handleFolderUpload(event)">
-                    <input type="file" id="file-upload-input" multiple class="file-hidden" onchange="handleFileUpload(event)">
-                    <button class="btn btn-primary" onclick="document.getElementById('folder-upload-input').click()">
-                        <i class="fa fa-folder-plus"></i> Upload Activity Folder
-                    </button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('file-upload-input').click()">
-                        <i class="fa fa-file-circle-plus"></i> Add Activity File
-                    </button>
-                </div>
-            </div>
-
-            <div id="drop-zone" class="drop-zone" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
-                <i class="fa fa-cloud-arrow-up icon-upload"></i>
-                <p>Drag & drop your activity folders or files here</p>
-            </div>
-
+        <!-- Navigation & Upload Bar -->
+        <div class="toolbar">
             <div class="breadcrumb">
-                Current Location: <span id="current-path" onclick="goHome()">root</span>
+                <button onclick="goHome()" class="home-btn"><i class="fa fa-home"></i></button>
+                <span id="current-path">root</span>
             </div>
+            <div class="upload-actions">
+                <label class="upload-btn">
+                    <i class="fa fa-upload"></i> Upload File
+                    <input type="file" id="file-input" onchange="handleFileUpload(event)" multiple hidden>
+                </label>
+                <label class="upload-btn folder-btn">
+                    <i class="fa fa-folder-plus"></i> Upload Folder
+                    <input type="file" id="folder-input" onchange="handleFolderUpload(event)" webkitdirectory directory multiple hidden>
+                </label>
+            </div>
+        </div>
 
-            <div id="file-grid" class="file-grid"></div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Ace Dave Reyes. BSIT-31 Student Portfolio.</p>
-    </footer>
+        <!-- File Grid Dropzone -->
+        <div id="file-grid" class="file-grid" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+            <!-- Dynamic items rendered here -->
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
