@@ -14,26 +14,6 @@ async function fetchItems() {
 
 function loadFiles() {
     fetchItems();
-    let savedImage = localStorage.getItem('profile_image');
-    if (savedImage) {
-        document.getElementById('photo-box').innerHTML = '<img src="' + savedImage + '">';
-    }
-}
-
-function triggerPhotoUpload() {
-    document.getElementById('profile-photo-input').click();
-}
-
-function previewImage(event) {
-    let file = event.target.files[0];
-    if (file) {
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            localStorage.setItem('profile_image', e.target.result);
-            document.getElementById('photo-box').innerHTML = '<img src="' + e.target.result + '">';
-        }
-        reader.readAsDataURL(file);
-    }
 }
 
 function render() {
@@ -54,7 +34,14 @@ function render() {
         
         html += '<div onclick="clickItem(\'' + item._id + '\', \'' + item.type + '\', \'' + item.name + '\')" class="file-item">';
         html += '<div class="file-info"><i class="fa ' + iconClass + '"></i><span class="file-name">' + item.name + '</span></div>';
-        html += '<button class="delete-btn" onclick="event.stopPropagation(); deleteItem(\'' + item._id + '\')"><i class="fa fa-trash"></i></button>';
+        
+        html += '<div class="file-actions">';
+        if (item.type === 'file') {
+            html += '<button class="download-btn" title="Download File" onclick="event.stopPropagation(); downloadItem(\'' + item._id + '\')"><i class="fa fa-download"></i></button>';
+        }
+        html += '<button class="delete-btn" title="Delete" onclick="event.stopPropagation(); deleteItem(\'' + item._id + '\')"><i class="fa fa-trash"></i></button>';
+        html += '</div>';
+        
         html += '</div>';
     }
     grid.innerHTML = html;
@@ -66,9 +53,23 @@ function clickItem(id, type, name) {
         currentFolderName = name;
         render();
     } else {
-        let found = allData.find(x => x._id === id);
-        alert('File Content:\n\n' + (found.content || '(This file is empty)'));
+        downloadItem(id);
     }
+}
+
+function downloadItem(id) {
+    let found = allData.find(x => x._id === id);
+    if (!found || found.type !== 'file') return;
+
+    let blob = new Blob([found.content || ''], { type: 'text/plain;charset=utf-8' });
+    let url = URL.createObjectURL(blob);
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = found.name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 function goHome() {
@@ -165,5 +166,3 @@ async function deleteItem(id) {
         console.error('Error deleting item:', err);
     }
 }
-
-loadFiles();
