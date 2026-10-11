@@ -175,7 +175,7 @@ async function processEntry(entry, parentId) {
 async function deleteItem(id) {
     if (!confirm('Are you sure you want to delete this?')) return;
     try {
-        let response = await fetch('/api/items/' + id, { method: 'DELETE' });
+        let response = await fetch('/api/items?id=' + id, { method: 'DELETE' });
         if (response.ok) fetchItems();
     } catch (err) {
         console.error('Error deleting item:', err);
