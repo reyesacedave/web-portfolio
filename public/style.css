@@ -1,0 +1,180 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    background-color: #111827;
+    color: #f3f4f6;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.navbar {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #1f2937;
+    width: 100%;
+}
+.navbar h1 { font-size: 1.25rem; color: #818cf8; }
+.navbar nav a { color: #d1d5db; text-decoration: none; margin-left: 1rem; font-size: 0.875rem; }
+.navbar nav a:hover { color: #fff; }
+
+.container {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.card {
+    background-color: #1f2937;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #374151;
+}
+
+.about-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+}
+@media (min-width: 640px) {
+    .about-section { flex-direction: row; text-align: left; }
+}
+.about-section h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.about-section p { color: #d1d5db; font-size: 0.875rem; line-height: 1.5; }
+
+.photo-box {
+    width: 7rem;
+    height: 7rem;
+    border-radius: 9999px;
+    background-color: #111827;
+    border: 2px dashed #4b5563;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+.photo-box i { font-size: 1.875rem; margin-bottom: 0.25rem; color: #6b7280; }
+.photo-box span { font-size: 0.625rem; color: #6b7280; }
+.photo-box img { width: 100%; height: 100%; object-fit: cover; }
+
+.workspace-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.workspace-header h3 { font-size: 1.125rem; }
+.text-muted { color: #9ca3af; font-size: 0.75rem; }
+
+.btn-group { display: flex; gap: 0.5rem; }
+.btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    border: none;
+    font-weight: 500;
+}
+.btn-primary { background-color: #4f46e5; color: #fff; }
+.btn-primary:hover { background-color: #4338ca; }
+.btn-secondary { background-color: #374151; color: #f3f4f6; border: 1px solid #4b5563; }
+.btn-secondary:hover { background-color: #4b5563; }
+
+.file-hidden { display: none; }
+
+.drop-zone {
+    border: 2px dashed #374151;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    text-align: center;
+    background-color: rgba(17, 24, 39, 0.5);
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+.drop-zone:hover { border-color: #6366f1; }
+.icon-upload { font-size: 1.5rem; color: #818cf8; margin-bottom: 0.5rem; }
+.drop-zone p { font-size: 0.75rem; color: #d1d5db; font-weight: 500; }
+
+.breadcrumb {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    background-color: #111827;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #374151;
+    margin-bottom: 1rem;
+}
+#current-path { color: #818cf8; font-weight: bold; cursor: pointer; }
+
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    min-height: 9.375rem;
+}
+@media (min-width: 640px) {
+    .file-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.file-item {
+    background-color: #111827;
+    border: 1px solid #374151;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.file-item:hover { border-color: #6366f1; }
+.file-info { display: flex; align-items: center; gap: 0.5rem; overflow: hidden; }
+.file-name { font-size: 0.75rem; color: #e5e7eb; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.folder-icon { color: #facc15; }
+.file-icon { color: #818cf8; }
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    font-size: 0.75rem;
+    opacity: 0;
+}
+.file-item:hover .delete-btn { opacity: 1; }
+.delete-btn:hover { color: #f87171; }
+
+.empty-state {
+    grid-column: span 3 / span 3;
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.75rem;
+    padding: 2.5rem 0;
+}
+
+footer {
+    background-color: #030712;
+    border-top: 1px solid #1f2937;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 3rem;
+}

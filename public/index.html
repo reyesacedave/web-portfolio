@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ace Dave Reyes - Student Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <h1>Ace Dave Reyes</h1>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#workspace">Activities</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- About Section -->
+        <section id="about" class="card about-section">
+            <div id="photo-box" class="photo-box" title="Click to change photo" onclick="triggerPhotoUpload()">
+                <i class="fa fa-user"></i>
+                <span>Add Photo</span>
+                <input type="file" id="profile-photo-input" accept="image/*" class="file-hidden" onchange="previewImage(event)">
+            </div>
+            <div>
+                <h2>Hello, I'm Ace Dave Reyes!</h2>
+                <p>BSIT-31 Student | Passionate about coding, gaming, and watching anime. Exploring full-stack web development and building interactive student projects.</p>
+            </div>
+        </section>
+
+        <!-- Activities Section -->
+        <section id="workspace" class="card">
+            <div class="workspace-header">
+                <div>
+                    <h3>Activities & Projects</h3>
+                    <p class="text-muted">Explore my coursework, laboratory files, and activity submissions.</p>
+                </div>
+                <div class="btn-group">
+                    <input type="file" id="folder-upload-input" webkitdirectory directory multiple class="file-hidden" onchange="handleFolderUpload(event)">
+                    <input type="file" id="file-upload-input" multiple class="file-hidden" onchange="handleFileUpload(event)">
+                    <button class="btn btn-primary" onclick="document.getElementById('folder-upload-input').click()">
+                        <i class="fa fa-folder-plus"></i> Upload Activity Folder
+                    </button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('file-upload-input').click()">
+                        <i class="fa fa-file-circle-plus"></i> Add Activity File
+                    </button>
+                </div>
+            </div>
+
+            <div id="drop-zone" class="drop-zone" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+                <i class="fa fa-cloud-arrow-up icon-upload"></i>
+                <p>Drag & drop your activity folders or files here</p>
+            </div>
+
+            <div class="breadcrumb">
+                Current Location: <span id="current-path" onclick="goHome()">root</span>
+            </div>
+
+            <div id="file-grid" class="file-grid"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Ace Dave Reyes. BSIT-31 Student Portfolio.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
