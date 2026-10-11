@@ -18,7 +18,7 @@ const ItemSchema = new mongoose.Schema({
 
 const Item = mongoose.models.Item || mongoose.model('Item', ItemSchema);
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     try {
         await connectDB();
 
@@ -34,7 +34,11 @@ export default async function handler(req, res) {
         } 
         
         if (req.method === 'DELETE') {
-            let id = req.query.id || req.url.split('/').pop();
+            // Extracts ID from query parameter: /api/items?id=...
+            let id = req.query.id;
+            if (!id) {
+                return res.status(400).json({ error: 'Item ID is required' });
+            }
             await Item.findByIdAndDelete(id);
             return res.json({ success: true });
         }
@@ -43,4 +47,4 @@ export default async function handler(req, res) {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-}
+};

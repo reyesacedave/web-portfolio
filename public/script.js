@@ -176,7 +176,11 @@ async function deleteItem(id) {
     if (!confirm('Are you sure you want to delete this?')) return;
     try {
         let response = await fetch('/api/items?id=' + id, { method: 'DELETE' });
-        if (response.ok) fetchItems();
+        if (response.ok) {
+            fetchItems();
+        } else {
+            console.error('Failed to delete item');
+        }
     } catch (err) {
         console.error('Error deleting item:', err);
     }
