@@ -2,6 +2,16 @@ let allData = [];
 let currentParentId = 'root';
 let currentFolderName = '';
 
+// Helper function to convert files to Base64 Data URL safely
+function readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = (e) => reject(e);
+        reader.readAsDataURL(file);
+    });
+}
+
 async function fetchItems() {
     try {
         let res = await fetch('/api/items');
@@ -78,33 +88,40 @@ function render() {
     grid.innerHTML = html;
 }
 
-function downloadItem(id) {
+async function downloadItem(id) {
     let item = allData.find(x => x._id === id);
     if (!item) return;
 
     if (item.type === 'file') {
-        let blob = new Blob([item.content || ''], { type: 'text/plain' });
-        let url = URL.createObjectURL(blob);
         let a = document.createElement('a');
-        a.href = url;
+        a.href = item.content;
         a.download = item.name;
         a.click();
-        URL.revokeObjectURL(url);
     } else if (item.type === 'folder') {
         let subFiles = allData.filter(x => x.parentId === item._id && x.type === 'file');
         if (subFiles.length === 0) {
             alert('This folder is empty.');
             return;
         }
+
+        let zip = new JSZip();
+
         subFiles.forEach(file => {
-            let blob = new Blob([file.content || ''], { type: 'text/plain' });
-            let url = URL.createObjectURL(blob);
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = item.name + '_' + file.name;
-            a.click();
-            URL.revokeObjectURL(url);
+            if (file.content && file.content.includes(',')) {
+                let base64Data = file.content.split(',')[1];
+                zip.file(file.name, base64Data, { base64: true });
+            } else {
+                zip.file(file.name, file.content || '');
+            }
         });
+
+        let zipBlob = await zip.generateAsync({ type: 'blob' });
+        let url = URL.createObjectURL(zipBlob);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = item.name + '.zip';
+        a.click();
+        URL.revokeObjectURL(url);
     }
 }
 
@@ -115,7 +132,11 @@ function clickItem(id, type, name) {
         render();
     } else {
         let found = allData.find(x => x._id === id);
-        alert('File Content:\n\n' + (found.content || '(This file is empty)'));
+        if (found.content && found.content.startsWith('data:image')) {
+            alert('Image File: ' + found.name + '\n\nUse the download button to view full quality.');
+        } else {
+            alert('File Content:\n\n' + (found.content || '(This file is empty)'));
+        }
     }
 }
 
@@ -142,8 +163,8 @@ async function handleFileUpload(event) {
     let files = event.target.files;
     for (let i = 0; i < files.length; i++) {
         let file = files[i];
-        let textContent = await file.text().catch(() => '(Binary file)');
-        await saveItemToDB(file.name, 'file', currentParentId, textContent);
+        let base64Content = await readFileAsDataURL(file);
+        await saveItemToDB(file.name, 'file', currentParentId, base64Content);
     }
     fetchItems();
     event.target.value = '';
@@ -167,9 +188,9 @@ async function handleFolderUpload(event) {
             targetParentId = existingFolder._id;
         }
 
-        let textContent = await file.text().catch(() => '(Binary file)');
+        let base64Content = await readFileAsDataURL(file);
         let fileName = pathParts[pathParts.length - 1];
-        await saveItemToDB(fileName, 'file', targetParentId, textContent);
+        await saveItemToDB(fileName, 'file', targetParentId, base64Content);
     }
     fetchItems();
     event.target.value = '';
@@ -188,8 +209,8 @@ async function handleDrop(event) {
 async function processEntry(entry, parentId) {
     if (entry.isFile) {
         entry.file(async function(file) {
-            let textContent = await file.text().catch(() => '(Binary file)');
-            await saveItemToDB(file.name, 'file', parentId, textContent);
+            let base64Content = await readFileAsDataURL(file);
+            await saveItemToDB(file.name, 'file', parentId, base64Content);
             fetchItems();
         });
     } else if (entry.isDirectory) {
