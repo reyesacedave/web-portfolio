@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 
-// Middleware
+// Enable JSON parsing
 app.use(express.json());
+
+// Serve all static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB Connection
@@ -54,7 +56,7 @@ app.delete('/api/items/:id', async (req, res) => {
     }
 });
 
-// Serve index.html for root path fallback
+// Fallback: Send index.html for any other route
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
