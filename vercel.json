@@ -1,3 +1,11 @@
-git add server.js
-git commit -m "Optimize server.js with cached serverless database connection"
-git push origin main
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/server.js" }
+  ],
+  "functions": {
+    "server.js": {
+      "includeFiles": "public/**"
+    }
+  }
+}
