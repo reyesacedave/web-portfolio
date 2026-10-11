@@ -1,4 +1,4 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
+- { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
     background-color: #111827;
@@ -149,6 +149,23 @@ body {
 
 .folder-icon { color: #facc15; }
 .file-icon { color: #818cf8; }
+
+.action-btns {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.download-btn {
+    background: none;
+    border: none;
+    color: #818cf8;
+    cursor: pointer;
+    font-size: 0.75rem;
+    opacity: 0;
+}
+.file-item:hover .download-btn { opacity: 1; }
+.download-btn:hover { color: #6366f1; }
 
 .delete-btn {
     background: none;
