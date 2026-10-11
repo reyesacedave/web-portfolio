@@ -5,30 +5,40 @@ let currentFolderName = '';
 async function fetchItems() {
     try {
         let res = await fetch('/api/items');
-        if (!res.ok) throw new Error('Failed to fetch items');
         allData = await res.json();
         render();
     } catch (err) {
         console.error('Error fetching items:', err);
-        let grid = document.getElementById('file-grid');
-        if (grid) {
-            grid.innerHTML = '<div class="empty-state">Connected, but unable to load items. Check database connection.</div>';
-        }
     }
 }
 
 function loadFiles() {
     fetchItems();
+    let savedImage = localStorage.getItem('profile_image');
+    if (savedImage) {
+        document.getElementById('photo-box').innerHTML = '<img src="' + savedImage + '">';
+    }
+}
+
+function triggerPhotoUpload() {
+    document.getElementById('profile-photo-input').click();
+}
+
+function previewImage(event) {
+    let file = event.target.files[0];
+    if (file) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            localStorage.setItem('profile_image', e.target.result);
+            document.getElementById('photo-box').innerHTML = '<img src="' + e.target.result + '">';
+        }
+        reader.readAsDataURL(file);
+    }
 }
 
 function render() {
     let grid = document.getElementById('file-grid');
-    if (!grid) return;
-
-    let pathSpan = document.getElementById('current-path');
-    if (pathSpan) {
-        pathSpan.innerText = currentFolderName ? 'root / ' + currentFolderName : 'root';
-    }
+    document.getElementById('current-path').innerText = currentFolderName ? 'root / ' + currentFolderName : 'root';
 
     let currentItems = allData.filter(item => item.parentId === currentParentId);
 
@@ -44,14 +54,7 @@ function render() {
         
         html += '<div onclick="clickItem(\'' + item._id + '\', \'' + item.type + '\', \'' + item.name + '\')" class="file-item">';
         html += '<div class="file-info"><i class="fa ' + iconClass + '"></i><span class="file-name">' + item.name + '</span></div>';
-        
-        html += '<div class="file-actions">';
-        if (item.type === 'file') {
-            html += '<button class="download-btn" title="Download File" onclick="event.stopPropagation(); downloadItem(\'' + item._id + '\')"><i class="fa fa-download"></i></button>';
-        }
-        html += '<button class="delete-btn" title="Delete" onclick="event.stopPropagation(); deleteItem(\'' + item._id + '\')"><i class="fa fa-trash"></i></button>';
-        html += '</div>';
-        
+        html += '<button class="delete-btn" onclick="event.stopPropagation(); deleteItem(\'' + item._id + '\')"><i class="fa fa-trash"></i></button>';
         html += '</div>';
     }
     grid.innerHTML = html;
@@ -63,23 +66,9 @@ function clickItem(id, type, name) {
         currentFolderName = name;
         render();
     } else {
-        downloadItem(id);
+        let found = allData.find(x => x._id === id);
+        alert('File Content:\n\n' + (found.content || '(This file is empty)'));
     }
-}
-
-function downloadItem(id) {
-    let found = allData.find(x => x._id === id);
-    if (!found || found.type !== 'file') return;
-
-    let blob = new Blob([found.content || ''], { type: 'text/plain;charset=utf-8' });
-    let url = URL.createObjectURL(blob);
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = found.name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
 }
 
 function goHome() {
@@ -124,10 +113,8 @@ async function handleFolderUpload(event) {
 
         if (!existingFolder) {
             let newFolder = await saveItemToDB(folderName, 'folder', currentParentId, '');
-            if (newFolder) {
-                allData.push(newFolder);
-                targetParentId = newFolder._id;
-            }
+            allData.push(newFolder);
+            targetParentId = newFolder._id;
         } else {
             targetParentId = existingFolder._id;
         }
@@ -159,15 +146,13 @@ async function processEntry(entry, parentId) {
         });
     } else if (entry.isDirectory) {
         let newFolder = await saveItemToDB(entry.name, 'folder', parentId, '');
-        if (newFolder) {
-            allData.push(newFolder);
-            let reader = entry.createReader();
-            reader.readEntries(async function(entries) {
-                for (let subEntry of entries) {
-                    await processEntry(subEntry, newFolder._id);
-                }
-            });
-        }
+        allData.push(newFolder);
+        let reader = entry.createReader();
+        reader.readEntries(async function(entries) {
+            for (let subEntry of entries) {
+                await processEntry(subEntry, newFolder._id);
+            }
+        });
     }
 }
 
@@ -180,3 +165,5 @@ async function deleteItem(id) {
         console.error('Error deleting item:', err);
     }
 }
+
+loadFiles();
