@@ -5,10 +5,16 @@ let currentFolderName = '';
 async function fetchItems() {
     try {
         let res = await fetch('/api/items');
+        if (!res.ok) throw new Error('Failed to fetch items');
         allData = await res.json();
         render();
     } catch (err) {
         console.error('Error fetching items:', err);
+        // Fallback display so UI doesn't break
+        let grid = document.getElementById('file-grid');
+        if (grid) {
+            grid.innerHTML = '<div class="empty-state">Connected, but unable to load items. Check database connection.</div>';
+        }
     }
 }
 
@@ -18,7 +24,12 @@ function loadFiles() {
 
 function render() {
     let grid = document.getElementById('file-grid');
-    document.getElementById('current-path').innerText = currentFolderName ? 'root / ' + currentFolderName : 'root';
+    if (!grid) return;
+
+    let pathSpan = document.getElementById('current-path');
+    if (pathSpan) {
+        pathSpan.innerText = currentFolderName ? 'root / ' + currentFolderName : 'root';
+    }
 
     let currentItems = allData.filter(item => item.parentId === currentParentId);
 
@@ -114,8 +125,10 @@ async function handleFolderUpload(event) {
 
         if (!existingFolder) {
             let newFolder = await saveItemToDB(folderName, 'folder', currentParentId, '');
-            allData.push(newFolder);
-            targetParentId = newFolder._id;
+            if (newFolder) {
+                allData.push(newFolder);
+                targetParentId = newFolder._id;
+            }
         } else {
             targetParentId = existingFolder._id;
         }
@@ -147,13 +160,15 @@ async function processEntry(entry, parentId) {
         });
     } else if (entry.isDirectory) {
         let newFolder = await saveItemToDB(entry.name, 'folder', parentId, '');
-        allData.push(newFolder);
-        let reader = entry.createReader();
-        reader.readEntries(async function(entries) {
-            for (let subEntry of entries) {
-                await processEntry(subEntry, newFolder._id);
-            }
-        });
+        if (newFolder) {
+            allData.push(newFolder);
+            let reader = entry.createReader();
+            reader.readEntries(async function(entries) {
+                for (let subEntry of entries) {
+                    await processEntry(subEntry, newFolder._id);
+                }
+            });
+        }
     }
 }
 
