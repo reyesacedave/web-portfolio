@@ -3,16 +3,25 @@ const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI;
-if (MONGODB_URI) {
-    mongoose.connect(MONGODB_URI)
-        .then(() => console.log('Connected to MongoDB Atlas'))
-        .catch(err => console.error('MongoDB connection error:', err));
+// Cached database connection for Vercel Serverless
+let isConnected = false;
+async function connectDB() {
+    if (isConnected) return;
+    const MONGODB_URI = process.env.MONGODB_URI;
+    if (!MONGODB_URI) {
+        console.warn('MONGODB_URI is not defined in environment variables.');
+        return;
+    }
+    try {
+        await mongoose.connect(MONGODB_URI);
+        isConnected = true;
+        console.log('Connected to MongoDB Atlas');
+    } catch (err) {
+        console.error('MongoDB connection error:', err);
+    }
 }
 
 // Database Schema & Model
@@ -23,11 +32,13 @@ const ItemSchema = new mongoose.Schema({
     content: String
 });
 
-const Item = mongoose.model('Item', ItemSchema);
+// Prevent overwrite model error in serverless warm starts
+const Item = mongoose.models.Item || mongoose.model('Item', ItemSchema);
 
-// API Routes
+// API Routes (Ensuring DB connects per request safely)
 app.get('/api/items', async (req, res) => {
     try {
+        await connectDB();
         let items = await Item.find();
         res.json(items);
     } catch (err) {
@@ -37,6 +48,7 @@ app.get('/api/items', async (req, res) => {
 
 app.post('/api/items', async (req, res) => {
     try {
+        await connectDB();
         let newItem = new Item(req.body);
         await newItem.save();
         res.json(newItem);
@@ -47,6 +59,7 @@ app.post('/api/items', async (req, res) => {
 
 app.delete('/api/items/:id', async (req, res) => {
     try {
+        await connectDB();
         await Item.findByIdAndDelete(req.params.id);
         res.json({ success: true });
     } catch (err) {
@@ -54,10 +67,9 @@ app.delete('/api/items/:id', async (req, res) => {
     }
 });
 
-// Fallback: Send index.html for any other route
+// Fallback: Send index.html for frontend routing
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// EXPORT APP FOR VERCEL SERVERLESS DEPLOYMENT (Crucial for preventing 404s)
 module.exports = app;
