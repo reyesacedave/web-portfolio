@@ -20,24 +20,15 @@
             <a href="#experience">Experience</a>
             <a href="#contact">Contact</a>
         </nav>
-        <div class="nav-action">
-            <label for="htmlFileInput" class="upload-btn-nav">
-                <i class="fa-solid fa-upload"></i> Test HTML
-            </label>
-            <input type="file" id="htmlFileInput" accept=".html" style="display: none;">
-        </div>
     </header>
 
     <!-- Home / Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
             <h1>Hi, I'm <span class="highlight">Ace</span></h1>
-            <p>BSIT Student & Full-Stack Developer specializing in clean UI design, robust database architecture, and interactive web tools.</p>
+            <p>BSIT Student & Full-Stack Developer specializing in clean UI design, database architecture, and interactive web tools.</p>
             <div class="hero-buttons">
                 <a href="#projects" class="btn-primary">View Projects</a>
-                <label for="htmlFileInput" class="btn-secondary">
-                    <i class="fa-solid fa-code"></i> Upload & Preview HTML
-                </label>
             </div>
         </div>
     </section>
@@ -57,20 +48,34 @@
     <section id="skills" class="section bg-light">
         <h2 class="section-title">Technical Skills</h2>
         <div class="skills-grid">
-            <div class="skill-card"><h3>Frontend</h3><p>HTML5, CSS3, JavaScript, Tkinter</p></div>
+            <div class="skill-card"><h3>Frontend</h3><p>HTML, CSS, JavaScript</p></div>
             <div class="skill-card"><h3>Backend</h3><p>Node.js, Express.js, Python</p></div>
-            <div class="skill-card"><h3>Databases</h3><p>MongoDB, Mongoose, MySQL, 3NF</p></div>
-            <div class="skill-card"><h3>Tools & 3D</h3><p>Git, Vercel, Blender, GIMP</p></div>
+            <div class="skill-card"><h3>Databases</h3><p>MongoDB, MySQL</p></div>
+            <div class="skill-card"><h3>Tools & 3D</h3><p>Git, Vercel, Blender</p></div>
         </div>
     </section>
 
     <!-- Projects Section -->
     <section id="projects" class="section">
-        <h2 class="section-title">Projects & Activities</h2>
-        <p class="section-subtitle">Explore my academic projects or upload your own HTML file above to view it live.</p>
+        <div class="projects-header-flex">
+            <div>
+                <h2 class="section-title" style="text-align: left; margin-bottom: 0;">Projects & Activities</h2>
+                <p class="section-subtitle" style="text-align: left; margin-bottom: 0;">Upload an HTML file below to transform it into a card you can view live.</p>
+            </div>
+            <!-- Upload Button directly in the Projects section header -->
+            <div class="projects-action-area">
+                <label for="htmlFileInput" class="upload-btn-projects">
+                    <i class="fa-solid fa-upload"></i> Upload HTML Project
+                </label>
+                <input type="file" id="htmlFileInput" accept=".html" style="display: none;">
+            </div>
+        </div>
 
+        <!-- Project Grid -->
         <div class="project-grid" id="projectGrid">
-            <div class="project-card">
+            <!-- Project 1 -->
+            <div class="project-card" id="project-1">
+                <button class="btn-delete-card" onclick="deleteProject('project-1')" title="Delete Project"><i class="fa-solid fa-trash"></i></button>
                 <div class="project-thumbnail"><i class="fa-solid fa-cash-register preview-icon"></i></div>
                 <div class="project-info">
                     <span class="project-number">PROJECT 01</span>
@@ -83,12 +88,14 @@
                     </div>
                     <div class="project-status completed">Completed</div>
                     <div class="project-actions">
-                        <button class="btn-view" onclick="openDemoModal('Credit-Based Sales & Inventory System', 'A comprehensive system for tracking transactions and inventory.')">View Project</button>
+                        <button class="btn-view" onclick="openDemoModal('Credit-Based Sales & Inventory System', 'A comprehensive system for tracking transactions and inventory stock levels for the EOV store.')">View Project</button>
                     </div>
                 </div>
             </div>
 
-            <div class="project-card">
+            <!-- Project 2 -->
+            <div class="project-card" id="project-2">
+                <button class="btn-delete-card" onclick="deleteProject('project-2')" title="Delete Project"><i class="fa-solid fa-trash"></i></button>
                 <div class="project-thumbnail"><i class="fa-solid fa-laptop-code preview-icon"></i></div>
                 <div class="project-info">
                     <span class="project-number">PROJECT 02</span>
@@ -101,7 +108,7 @@
                     </div>
                     <div class="project-status completed">Completed</div>
                     <div class="project-actions">
-                        <button class="btn-view" onclick="openDemoModal('Personal Web Portfolio', 'A responsive personal portfolio website.')">View Project</button>
+                        <button class="btn-view" onclick="openDemoModal('Personal Web Portfolio', 'A responsive personal portfolio built with Node.js, Express, MongoDB, and deployed on Vercel.')">View Project</button>
                     </div>
                 </div>
             </div>
@@ -141,15 +148,15 @@
         </div>
     </footer>
 
-    <!-- HTML Live Preview Modal -->
+    <!-- Fullscreen Website Preview Modal Overlay -->
     <div id="previewModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modalTitle">Live HTML Preview</h3>
-                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <h3 id="modalTitle">Live Site Preview</h3>
+                <span class="close-modal" onclick="closeModal()" title="Close Preview">&times; Close Preview</span>
             </div>
             <div class="modal-body">
-                <iframe id="previewFrame" title="HTML Preview"></iframe>
+                <iframe id="previewFrame" title="Full Screen Website Preview"></iframe>
             </div>
         </div>
     </div>
