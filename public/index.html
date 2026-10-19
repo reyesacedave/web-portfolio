@@ -60,59 +60,26 @@
         <div class="projects-header-flex">
             <div>
                 <h2 class="section-title" style="text-align: left; margin-bottom: 0;">Projects & Activities</h2>
-                <p class="section-subtitle" style="text-align: left; margin-bottom: 0;">Upload an HTML file below to transform it into a card you can view live.</p>
+                <p class="section-subtitle" style="text-align: left; margin-bottom: 0;">Upload a single HTML file or an entire project folder to view live and inspect source files.</p>
             </div>
-            <!-- Upload Button directly in the Projects section header -->
-            <div class="projects-action-area">
+            
+            <div class="projects-action-area" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <!-- Single File Upload -->
                 <label for="htmlFileInput" class="upload-btn-projects">
-                    <i class="fa-solid fa-upload"></i> Upload HTML Project
+                    <i class="fa-solid fa-file-code"></i> Upload HTML File
                 </label>
                 <input type="file" id="htmlFileInput" accept=".html" style="display: none;">
+
+                <!-- Folder Upload -->
+                <label for="folderFileInput" class="upload-btn-projects" style="background: #1e293b;">
+                    <i class="fa-solid fa-folder-open"></i> Upload Project Folder
+                </label>
+                <input type="file" id="folderFileInput" webkitdirectory directory multiple style="display: none;">
             </div>
         </div>
 
-        <!-- Project Grid -->
-        <div class="project-grid" id="projectGrid">
-            <!-- Project 1 -->
-            <div class="project-card" id="project-1">
-                <button class="btn-delete-card" onclick="deleteProject('project-1')" title="Delete Project"><i class="fa-solid fa-trash"></i></button>
-                <div class="project-thumbnail"><i class="fa-solid fa-cash-register preview-icon"></i></div>
-                <div class="project-info">
-                    <span class="project-number">PROJECT 01</span>
-                    <h3>Credit-Based Sales & Inventory System</h3>
-                    <p>A comprehensive system for tracking transactions, inventory stock levels, customer credits, and sales reports.</p>
-                    <div class="tech-badges">
-                        <span class="badge">Node.js</span>
-                        <span class="badge">MongoDB</span>
-                        <span class="badge">Express</span>
-                    </div>
-                    <div class="project-status completed">Completed</div>
-                    <div class="project-actions">
-                        <button class="btn-view" onclick="openDemoModal('Credit-Based Sales & Inventory System', 'A comprehensive system for tracking transactions and inventory stock levels for the EOV store.')">View Project</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 2 -->
-            <div class="project-card" id="project-2">
-                <button class="btn-delete-card" onclick="deleteProject('project-2')" title="Delete Project"><i class="fa-solid fa-trash"></i></button>
-                <div class="project-thumbnail"><i class="fa-solid fa-laptop-code preview-icon"></i></div>
-                <div class="project-info">
-                    <span class="project-number">PROJECT 02</span>
-                    <h3>Personal Web Portfolio</h3>
-                    <p>A responsive personal portfolio website designed to showcase developer skills, academic projects, and design journey.</p>
-                    <div class="tech-badges">
-                        <span class="badge">HTML</span>
-                        <span class="badge">CSS</span>
-                        <span class="badge">JavaScript</span>
-                    </div>
-                    <div class="project-status completed">Completed</div>
-                    <div class="project-actions">
-                        <button class="btn-view" onclick="openDemoModal('Personal Web Portfolio', 'A responsive personal portfolio built with Node.js, Express, MongoDB, and deployed on Vercel.')">View Project</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Dynamic Project Grid -->
+        <div class="project-grid" id="projectGrid"></div>
     </section>
 
     <!-- Experience Section -->
@@ -148,7 +115,7 @@
         </div>
     </footer>
 
-    <!-- Fullscreen Website Preview Modal Overlay -->
+    <!-- Fullscreen Live Site Preview Modal Overlay -->
     <div id="previewModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -157,6 +124,28 @@
             </div>
             <div class="modal-body">
                 <iframe id="previewFrame" title="Full Screen Website Preview"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Source Code & Image Asset Explorer Modal -->
+    <div id="codeModal" class="modal-overlay" style="display: none;">
+        <div class="code-modal-content">
+            <div class="modal-header">
+                <h3 id="codeModalTitle">Source Code Explorer</h3>
+                <button onclick="closeCodeModal()" class="btn-close">&times;</button>
+            </div>
+            <div class="code-editor-layout">
+                <div class="file-sidebar" id="fileSidebar">
+                    <!-- File list inserted here -->
+                </div>
+                <div class="code-viewer-container">
+                    <pre id="codeViewerContainer"><code id="codeViewerBox">Select a file from the sidebar to inspect its content...</code></pre>
+                    <div id="imageViewerContainer" style="display: none; text-align: center; padding: 2rem;">
+                        <img id="imageViewerBox" src="" alt="Image Preview" style="max-width: 100%; max-height: 60vh; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                        <p id="imageViewerName" style="margin-top: 1rem; color: #94a3b8; font-family: monospace;"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
