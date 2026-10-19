@@ -1,73 +1,159 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Ace Dave Reyes - Student Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ace | BSIT Portfolio & HTML Previewer</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
+    <!-- Header Navigation -->
     <header class="navbar">
-        <h1>Ace Dave Reyes</h1>
-        <nav>
+        <div class="logo">ACE<span>.</span></div>
+        <nav class="nav-links">
+            <a href="#home">Home</a>
             <a href="#about">About</a>
-            <a href="#workspace">Activities</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#experience">Experience</a>
+            <a href="#contact">Contact</a>
         </nav>
+        <div class="nav-action">
+            <label for="htmlFileInput" class="upload-btn-nav">
+                <i class="fa-solid fa-upload"></i> Test HTML
+            </label>
+            <input type="file" id="htmlFileInput" accept=".html" style="display: none;">
+        </div>
     </header>
 
-    <main class="container">
-        <!-- About Section -->
-        <section id="about" class="card about-section">
-            <div id="photo-box" class="photo-box" title="Click to change photo" onclick="triggerPhotoUpload()">
-                <i class="fa fa-user"></i>
-                <span>Add Photo</span>
-                <input type="file" id="profile-photo-input" accept="image/*" class="file-hidden" onchange="previewImage(event)">
+    <!-- Home / Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Hi, I'm <span class="highlight">Ace</span></h1>
+            <p>BSIT Student & Full-Stack Developer specializing in clean UI design, robust database architecture, and interactive web tools.</p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn-primary">View Projects</a>
+                <label for="htmlFileInput" class="btn-secondary">
+                    <i class="fa-solid fa-code"></i> Upload & Preview HTML
+                </label>
             </div>
-            <div>
-                <h2>Hello, I'm Ace Dave Reyes!</h2>
-                <p>BSIT-31 Student | Passionate about coding, gaming, and watching anime. Exploring full-stack web development and building interactive student projects.</p>
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Activities Section -->
-        <section id="workspace" class="card">
-            <div class="workspace-header">
-                <div>
-                    <h3>Activities & Projects</h3>
-                    <p class="text-muted">Explore my coursework, laboratory files, and activity submissions.</p>
+    <!-- About Section -->
+    <section id="about" class="section">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-container">
+            <div class="about-text">
+                <p>I am a Bachelor of Science in Information Technology (BSIT) student at <strong>Pambayang Dalubhasaan ng Marilao</strong>. I enjoy building practical full-stack software systems, user interfaces, and interactive web applications.</p>
+                <p>My technical toolkit spans across frontend design, backend routing with Node.js and Express, database normalization (3NF), and database management systems like MongoDB and MySQL.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section bg-light">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card"><h3>Frontend</h3><p>HTML5, CSS3, JavaScript, Tkinter</p></div>
+            <div class="skill-card"><h3>Backend</h3><p>Node.js, Express.js, Python</p></div>
+            <div class="skill-card"><h3>Databases</h3><p>MongoDB, Mongoose, MySQL, 3NF</p></div>
+            <div class="skill-card"><h3>Tools & 3D</h3><p>Git, Vercel, Blender, GIMP</p></div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <h2 class="section-title">Projects & Activities</h2>
+        <p class="section-subtitle">Explore my academic projects or upload your own HTML file above to view it live.</p>
+
+        <div class="project-grid" id="projectGrid">
+            <div class="project-card">
+                <div class="project-thumbnail"><i class="fa-solid fa-cash-register preview-icon"></i></div>
+                <div class="project-info">
+                    <span class="project-number">PROJECT 01</span>
+                    <h3>Credit-Based Sales & Inventory System</h3>
+                    <p>A comprehensive system for tracking transactions, inventory stock levels, customer credits, and sales reports.</p>
+                    <div class="tech-badges">
+                        <span class="badge">Node.js</span>
+                        <span class="badge">MongoDB</span>
+                        <span class="badge">Express</span>
+                    </div>
+                    <div class="project-status completed">Completed</div>
+                    <div class="project-actions">
+                        <button class="btn-view" onclick="openDemoModal('Credit-Based Sales & Inventory System', 'A comprehensive system for tracking transactions and inventory.')">View Project</button>
+                    </div>
                 </div>
-                <div class="btn-group">
-                    <input type="file" id="folder-upload-input" webkitdirectory directory multiple class="file-hidden" onchange="handleFolderUpload(event)">
-                    <input type="file" id="file-upload-input" multiple class="file-hidden" onchange="handleFileUpload(event)">
-                    <button class="btn btn-primary" onclick="document.getElementById('folder-upload-input').click()">
-                        <i class="fa fa-folder-plus"></i> Upload Activity Folder
-                    </button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('file-upload-input').click()">
-                        <i class="fa fa-file-circle-plus"></i> Add Activity File
-                    </button>
+            </div>
+
+            <div class="project-card">
+                <div class="project-thumbnail"><i class="fa-solid fa-laptop-code preview-icon"></i></div>
+                <div class="project-info">
+                    <span class="project-number">PROJECT 02</span>
+                    <h3>Personal Web Portfolio</h3>
+                    <p>A responsive personal portfolio website designed to showcase developer skills, academic projects, and design journey.</p>
+                    <div class="tech-badges">
+                        <span class="badge">HTML</span>
+                        <span class="badge">CSS</span>
+                        <span class="badge">JavaScript</span>
+                    </div>
+                    <div class="project-status completed">Completed</div>
+                    <div class="project-actions">
+                        <button class="btn-view" onclick="openDemoModal('Personal Web Portfolio', 'A responsive personal portfolio website.')">View Project</button>
+                    </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div id="drop-zone" class="drop-zone" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
-                <i class="fa fa-cloud-arrow-up icon-upload"></i>
-                <p>Drag & drop your activity folders or files here</p>
+    <!-- Experience Section -->
+    <section id="experience" class="section bg-light">
+        <h2 class="section-title">Academic Journey</h2>
+        <div class="experience-timeline">
+            <div class="timeline-item">
+                <h3>BSIT Student</h3>
+                <span class="timeline-place">Pambayang Dalubhasaan ng Marilao</span>
+                <p>Focusing on software development, full-stack web engineering, database design, and systems analysis.</p>
             </div>
+        </div>
+    </section>
 
-            <div class="breadcrumb">
-                Current Location: <span id="current-path" onclick="goHome()">home</span>
-            </div>
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="center-text">Feel free to connect with me via GitHub or email.</p>
+        <div class="contact-links">
+            <a href="https://github.com" target="_blank" class="contact-card"><i class="fa-brands fa-github"></i> GitHub</a>
+            <a href="mailto:ace@example.com" class="contact-card"><i class="fa-solid fa-envelope"></i> Email Me</a>
+        </div>
+    </section>
 
-            <div id="file-grid" class="file-grid"></div>
-        </section>
-    </main>
-
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Ace Dave Reyes. BSIT-31 Student Portfolio.</p>
+        <div class="footer-content">
+            <p>&copy; 2026 Ace. All Rights Reserved. Built with Node.js, MongoDB & Vercel.</p>
+            <div class="footer-socials">
+                <a href="https://github.com" target="_blank"><i class="fa-brands fa-github"></i></a>
+                <a href="mailto:ace@example.com"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
     </footer>
 
-    <!-- JSZip for folder packaging -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.2/jszip.min.js"></script>
+    <!-- HTML Live Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Live HTML Preview</h3>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <iframe id="previewFrame" title="HTML Preview"></iframe>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
