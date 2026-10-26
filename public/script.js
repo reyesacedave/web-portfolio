@@ -14,11 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (singleFileInput) singleFileInput.addEventListener('change', handleSingleFileUpload);
     if (folderFileInput) folderFileInput.addEventListener('change', handleFolderUpload);
 
-    // Fetch existing saved projects from MongoDB on load
     fetchProjectsFromDatabase();
 });
 
-// Fetch projects from MongoDB backend
 async function fetchProjectsFromDatabase() {
     try {
         const response = await fetch('/api/projects');
@@ -38,7 +36,6 @@ async function fetchProjectsFromDatabase() {
     }
 }
 
-// Save project to MongoDB backend
 async function saveProjectToDatabase(projectPayload) {
     try {
         const response = await fetch('/api/projects', {
@@ -52,7 +49,7 @@ async function saveProjectToDatabase(projectPayload) {
         });
         if (response.ok) {
             const saved = await response.json();
-            projectPayload.id = saved._id; // Assign MongoDB ID
+            projectPayload.id = saved._id;
             renderProjectGrid();
         }
     } catch (err) {
@@ -60,7 +57,6 @@ async function saveProjectToDatabase(projectPayload) {
     }
 }
 
-// 1. Single HTML File Upload
 function handleSingleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -84,7 +80,6 @@ function handleSingleFileUpload(event) {
     reader.readAsText(file);
 }
 
-// 2. Folder Upload with Relative Path Support
 async function handleFolderUpload(event) {
     const files = Array.from(event.target.files);
     if (!files || files.length === 0) return;
@@ -143,7 +138,6 @@ function readFileAsText(file) {
     });
 }
 
-// 3. Render Project Cards with Delete Button
 function renderProjectGrid() {
     const grid = document.getElementById('projectGrid');
     if (!grid) return;
@@ -202,7 +196,6 @@ async function deleteProject(index) {
     }
 }
 
-// 4. Real-Time Tabbed Preview System (with linked-page exploration)
 function resolveProjectPath(basePath, ref) {
     try {
         const clean = ref.replace(/\\/g, '/');
@@ -453,7 +446,7 @@ function switchPreviewTab(filePath, hash) {
         try {
             const el = iframe.contentDocument.getElementById(hash.slice(1));
             if (el) el.scrollIntoView();
-        } catch (err) { /* ignore */ }
+        } catch (err) {}
     };
 
     iframe.src = makeBlobUrl(html, 'text/html');
@@ -501,7 +494,6 @@ function closeModal() {
     currentActiveTabPath = null;
 }
 
-// 5. Minimalist Code Explorer
 function openCodeExplorer(index) {
     currentProjectIndex = index;
     const project = projectsList[index];
@@ -631,7 +623,6 @@ function closeCodeModal() {
     currentSelectedFilePath = null;
 }
 
-// 6. Download Project Zip
 async function downloadProjectZip(index) {
     const project = projectsList[index];
     if (!project || typeof JSZip === 'undefined') return;

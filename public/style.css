@@ -23,7 +23,6 @@ body {
     line-height: 1.6;
 }
 
-/* Navbar */
 .navbar {
     position: fixed;
     top: 0;
@@ -64,7 +63,6 @@ body {
     color: var(--primary);
 }
 
-/* Hero Section */
 .hero {
     height: 90vh;
     display: flex;
@@ -113,7 +111,6 @@ body {
     background: var(--primary-dark);
 }
 
-/* Sections */
 .section {
     padding: 5rem 10%;
 }
@@ -133,7 +130,6 @@ body {
     font-size: 0.95rem;
 }
 
-/* Projects Header Flex Alignment */
 .projects-header-flex {
     display: flex;
     justify-content: space-between;
@@ -164,7 +160,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* About & Skills */
 .about-container {
     max-width: 800px;
     margin: 0 auto;
@@ -193,7 +188,6 @@ body {
     color: var(--primary);
 }
 
-/* Projects Grid */
 .project-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -210,7 +204,6 @@ body {
     position: relative;
 }
 
-/* Delete icon styling */
 .btn-delete-card {
     position: absolute;
     top: 10px;
@@ -323,7 +316,6 @@ body {
     background: var(--primary-dark);
 }
 
-/* Contact & Footer */
 .center-text {
     text-align: center;
     color: var(--text-muted);
@@ -382,7 +374,6 @@ footer {
     color: var(--primary);
 }
 
-/* Fullscreen Website Preview Overlay */
 .modal {
     display: none;
     position: fixed;

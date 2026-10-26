@@ -4,20 +4,16 @@ const path = require('path');
 
 const app = express();
 
-// Increase payload limit (50MB) for multi-file folder uploads with assets[cite: 1]
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Serve static frontend files from public directory[cite: 1]
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Connect to MongoDB using environment variable or local database[cite: 1]
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/portfolio';
 mongoose.connect(MONGO_URI)
     .then(() => console.log('MongoDB Connected Successfully'))
     .catch(err => console.error('MongoDB Connection Error:', err.message));
 
-// MongoDB Schema supporting single HTML files or multi-file project maps[cite: 1]
 const projectSchema = new mongoose.Schema({
     title: { type: String, required: true },
     entryHtml: { type: String, required: true },
@@ -27,9 +23,6 @@ const projectSchema = new mongoose.Schema({
 
 const Project = mongoose.model('Project', projectSchema);
 
-// --- API ROUTES ---
-
-// Get all uploaded projects[cite: 1]
 app.get('/api/projects', async (req, res) => {
     try {
         const projects = await Project.find().sort({ createdAt: -1 });
@@ -39,7 +32,6 @@ app.get('/api/projects', async (req, res) => {
     }
 });
 
-// Save a new uploaded HTML file or folder project[cite: 1]
 app.post('/api/projects', async (req, res) => {
     try {
         const { title, entryHtml, filesMap } = req.body;
@@ -54,7 +46,6 @@ app.post('/api/projects', async (req, res) => {
     }
 });
 
-// Delete a project by ID[cite: 1]
 app.delete('/api/projects/:id', async (req, res) => {
     try {
         await Project.findByIdAndDelete(req.params.id);
@@ -64,12 +55,10 @@ app.delete('/api/projects/:id', async (req, res) => {
     }
 });
 
-// Fallback route to serve index.html[cite: 1]
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Export for Vercel or run locally[cite: 1]
 const PORT = process.env.PORT || 3000;
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
